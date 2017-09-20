@@ -1,0 +1,96 @@
+--- #Notifcation and Handling events - maybe need to install another repo like epel
+- hosts: localhost
+  remote_user: vagrant
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  connection: ssh
+  vars:
+    mysql_root_password: password
+  tasks:
+  - name: update apt cache
+    apt: 
+      update_cache=yes
+  - name: install php5 packages
+    apt:
+      name: php5
+      state: latest
+  - name: install libapache2-mod-php5 packages
+    apt:
+      name: libapache2-mod-php5
+      state: latest
+  - name: install php5-mcrypt packages
+    apt:
+      name: php5-mcrypt
+      state: latest
+  - name: install php5-mysql packages
+    apt:
+      name: php5-mysql
+      state: latest
+  - name: install php5-mysqlnd packages
+    apt:
+      name: php5-mysqlnd
+      state: latest            
+  - name: install apt-transport-https packages
+    apt:
+      name: apt-transport-https
+      state: latest
+  - name: install ca-certificates packages
+    apt:
+      name: ca-certificates
+      state: latest      
+  - name: install curl packages
+    apt:
+      name: curl
+      state: latest      
+  - name: install git packages
+    apt:
+      name: git
+      state: latest
+  - name: install apache2 web server
+    apt:
+      name: apache2
+      state: latest
+  - name: enable and start the apache2 service
+    service:
+      name: apache2
+      enabled: yes
+      state: restarted      
+  - name: Install MySQL
+    apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+    sudo: yes
+    with_items:
+    - python-mysqldb
+    - mysql-server
+  - name: Start the MySQL service
+    sudo: yes
+    service: 
+      name: mysql 
+      state: started
+      enabled: true
+#http://docs.ansible.com/ansible/latest/mysql_user_module.html
+#MySQL server installs with default login_user of ‘root’ and no password. To secure this user as part of an idempotent playbook, you must create at #least two tasks: the first must change the root user’s password, without providing any login_user/login_password details. The second must drop a #~/.my.cnf file containing the new root credentials. Subsequent runs of the playbook will then succeed by reading the new credentials from the file.
+  - name: update mysql root password for all root accounts
+    sudo: yes
+    mysql_user: 
+      name: root 
+      password: "{{ mysql_root_password }}"
+      check_implicit_admin: yes
+  - name: Create .my.cnf as per ansible module document
+    template:
+      src: "/home/vagrant/client.my.cnf.j2"
+      dest: "/root/.my.cnf"
+      owner: root
+      group: root
+      mode: 0600
+  - name: Create a new database with name 'test'
+    mysql_db:
+      name: test
+      state: present      
+  - name: Create a new user with name app 'user'
+    mysql_user:
+      name: appuser
+      password: apptest
+      priv: '*.*:ALL'
+      state: present      
+

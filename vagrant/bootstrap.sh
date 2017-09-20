@@ -19,6 +19,14 @@ apt-get install -y ansible
 
 ansible-playbook /home/vagrant/vibrato-playbook.yml
 
+sudo git clone https://github.com/jralmaraz/vibrato-tech-task /var/www/html/vibrato-tech-task
+
+mv /var/www/html/vibrato-tech-task/sample-codes/*.php /var/www/html/
+
+mv /var/www/html/vibrato-tech-task/sample-codes/*.sql /home/vagrant
+
+mysql test < /home/vagrant/sample-data.sql
+
 #MYSQL_ROOT_PASSWORD=$(head -c 32 /dev/urandom | base64)
 
 #docker run --name mysql-vibratotechtask -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -d mysql/mysql-server:latest
