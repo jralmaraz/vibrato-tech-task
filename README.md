@@ -11,18 +11,45 @@ To verify the functionality of the proposed scenario, 2 options were considered:
 
     Instructions to run:
 
-    sudo git clone https://github.com/jralmaraz/vibrato-tech-task .
+    git clone https://github.com/jralmaraz/vibrato-tech-task .
 
-    cd vibrato-tech-task/
+    cd vagrant/
 
     vagrant up
 
+    Retrieve data from DB will be accessible from: http://$VM-IP/users.php
+    
+    Insert data into DB will be accessible from: http://$VM-IP/insert.php
+    
+    Example:
+    
+        ==> default: To access the applications, use the following URLs (PLEASE NOTE THAT THE RETRIEVED IP ADDRESS NEEDS PUBLIC ACCESS):
+        ==> default:   Insert new record: http://192.168.1.5/insert.php
+        ==> default:   Retrieve records: http://192.168.1.5/users.php
 
-2 - Proviosioning an instance on Google Cloud Engine. This option
+
+2 - Proviosioning an instance on Google Cloud Engine. This option is not fully functional, but it has the purpose to demonstrate the integration capability with a custom cloud provider:
     
     Requirements: 
     
       - Vagrant installed in the local machine;
       - Google Cloud Engine account;
       - JSON file with API service account credentials;
+      - Google Vagrant plugin;
       
+      Instructions to run:
+
+
+        vagrant plugin install vagrant-google
+
+        git clone https://github.com/jralmaraz/vibrato-tech-task .
+
+        cd vagrant/GCE-sample
+
+        Get the correct JSON file for the API 
+
+        vagrant up
+        
+        Adjust firewall Rules
+        
+        Reference: Hashicorp's Mitchel Hashimoto: https://github.com/mitchellh/vagrant-google
