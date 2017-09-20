@@ -1,12 +1,12 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "VibratoTechTask"
-  config.vm.network "public_network", ip: "192.168.1.17", bridge: "wlan0"
-  config.vm.provision "file", source: "~/Documents/2017/Vagrant/vibrato-tech-task/vagrant/vibrato-playbook.yml", destination: "/home/vagrant/vibrato-playbook.yml"
-  config.vm.provision "file", source: "~/Documents/2017/Vagrant/vibrato-tech-task/vagrant/client.my.cnf.j2", destination: "/home/vagrant/client.my.cnf.j2"
+  config.vm.network "public_network", use_dhcp_assigned_default_route: true , bridge: "wlan0"
+  config.vm.provision "file", source: "vibrato-playbook.yml", destination: "/home/vagrant/vibrato-playbook.yml"
+  config.vm.provision "file", source: "client.my.cnf.j2", destination: "/home/vagrant/client.my.cnf.j2"
   config.vm.provision :shell, path: "bootstrap.sh"
-  #
-  # Run Ansible from the Vagrant Host
+  # 
+  # To Run Ansible from the Vagrant Host the version did't support features used in the playbook, so it was moved to run inside the bootstrap script
   #
   #config.vm.provision "ansible" do |ansible|
   #  ansible.playbook = "vibrato-playbook.yml"

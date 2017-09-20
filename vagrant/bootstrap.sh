@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-#Installing Docker CE - https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/#install-using-the-repository
 apt-get update
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -26,6 +25,17 @@ mv /var/www/html/vibrato-tech-task/sample-codes/*.php /var/www/html/
 mv /var/www/html/vibrato-tech-task/sample-codes/*.sql /home/vagrant
 
 mysql test < /home/vagrant/sample-data.sql
+
+IP="$(ifconfig | grep -A 1 'eth1' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)"
+
+echo "To access the applications, use the following URLs (PLEASE NOTE THAT THE RETRIEVED IP ADDRESS NEEDS PUBLIC ACCESS):
+
+  Insert new record: http://$IP/insert.php
+  Retrieve records: http://$IP/users.php"
+
+#A next version could separate the Web APP layer from the DB layer by running each component on different docker containers  
+  
+#Installing Docker CE - https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/#install-using-the-repository
 
 #MYSQL_ROOT_PASSWORD=$(head -c 32 /dev/urandom | base64)
 
